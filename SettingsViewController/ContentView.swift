@@ -22,34 +22,55 @@ struct SettingsSheet: UIViewControllerRepresentable {
 
 // MARK: - UITableViewController
 class SettingsTableViewController: UITableViewController {
-
-    let items = ["詳細画面1", "詳細画面2"]
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        title = "設定"
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    
+    // データ例
+    let sectionTitles = ["フルーツ", "動物"]
+    let items = [
+        ["Apple", "Banana", "Cherry"],   // セクション0
+        ["Dog", "Cat"]                   // セクション1
+    ]
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return sectionTitles.count
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        return items[section].count
     }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = items[indexPath.row]
-        cell.accessoryType = .disclosureIndicator
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sectionTitles[section]
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        cell.textLabel?.text = items[indexPath.section][indexPath.row]
         return cell
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-
-        let vc = UIViewController()
-        vc.view.backgroundColor = (indexPath.row == 0) ? .systemGreen : .systemBlue
-        vc.title = items[indexPath.row]
-
-        navigationController?.pushViewController(vc, animated: true)
+        
+        switch (indexPath.section, indexPath.row) {
+        case (0, 0): // フルーツ → Apple
+            let vc = AppleViewController()
+            navigationController?.pushViewController(vc, animated: true)
+            
+        case (0, 1): // フルーツ → Banana
+            let vc = BananaViewController()
+            navigationController?.pushViewController(vc, animated: true)
+            
+        case (1, 0): // 動物 → Dog
+            let vc = DogViewController()
+            navigationController?.pushViewController(vc, animated: true)
+            
+        case (1, 1): // 動物 → Cat
+            let vc = CatViewController()
+            navigationController?.pushViewController(vc, animated: true)
+            
+        default:
+            break
+        }
     }
 }
 
@@ -78,3 +99,38 @@ struct MyApp: App {
     }
 }
 
+
+
+import UIKit
+
+class AppleViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemRed
+        title = "🍎 Apple"
+    }
+}
+
+class BananaViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemYellow
+        title = "🍌 Banana"
+    }
+}
+
+class DogViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBrown
+        title = "🐶 Dog"
+    }
+}
+
+class CatViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBlue
+        title = "🐱 Cat"
+    }
+}
