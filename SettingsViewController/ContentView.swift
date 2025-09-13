@@ -46,28 +46,26 @@ class SettingsTableViewController: UITableViewController {
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
         cell.textLabel?.text = items[indexPath.section][indexPath.row]
+        
+        // セクション0は矢印あり、セクション1はなし
+        if indexPath.section == 0 {
+            cell.accessoryType = .disclosureIndicator
+        } else {
+            cell.accessoryType = .none
+        }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         switch (indexPath.section, indexPath.row) {
-        case (0, 0): // フルーツ → Apple
-            let vc = AppleViewController()
-            navigationController?.pushViewController(vc, animated: true)
-            
-        case (0, 1): // フルーツ → Banana
-            let vc = BananaViewController()
-            navigationController?.pushViewController(vc, animated: true)
-            
-        case (1, 0): // 動物 → Dog
-            let vc = DogViewController()
-            navigationController?.pushViewController(vc, animated: true)
-            
-        case (1, 1): // 動物 → Cat
-            let vc = CatViewController()
-            navigationController?.pushViewController(vc, animated: true)
-            
+        case (0, 0):
+            navigationController?.pushViewController(AppleViewController(), animated: true)
+        case (0, 1):
+            navigationController?.pushViewController(BananaViewController(), animated: true)
+        case (1, 0):
+            navigationController?.pushViewController(DogViewController(), animated: true)
+        case (1, 1):
+            navigationController?.pushViewController(CatViewController(), animated: true)
         default:
             break
         }
